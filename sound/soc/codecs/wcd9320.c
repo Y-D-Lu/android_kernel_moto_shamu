@@ -566,7 +566,8 @@ static int taiko_update_uhqa_mode(struct snd_soc_codec *codec, int path)
 	struct taiko_priv *taiko_p = snd_soc_codec_get_drvdata(codec);
 
 	/* Enable UHQA path for fs >= 96KHz or bit=24 bit */
-	if (((taiko_get_sample_rate(codec, path) & 0xE0) >= 0xA0) ||
+	if (high_perf_mode ||
+		((taiko_get_sample_rate(codec, path) & 0xE0) >= 0xA0) ||
 		(taiko_compare_bit_format(codec, 24))) {
 		taiko_p->uhqa_mode = 1;
 	} else {
@@ -3383,7 +3384,7 @@ static int taiko_hphl_dac_event(struct snd_soc_dapm_widget *w,
 						 WCD9XXX_CLSH_EVENT_PRE_DAC);
 		} else {
 			wcd9xxx_enable_high_perf_mode(codec, &taiko_p->clsh_d,
-						WCD9XXX_NON_UHQA_MODE,
+						taiko_p->uhqa_mode,
 						WCD9XXX_CLSAB_STATE_HPHL,
 						WCD9XXX_CLSAB_REQ_ENABLE);
 		}
@@ -3411,7 +3412,7 @@ static int taiko_hphl_dac_event(struct snd_soc_dapm_widget *w,
 						 WCD9XXX_CLSH_EVENT_POST_PA);
 		} else {
 			wcd9xxx_enable_high_perf_mode(codec, &taiko_p->clsh_d,
-						WCD9XXX_NON_UHQA_MODE,
+						taiko_p->uhqa_mode,
 						WCD9XXX_CLSAB_STATE_HPHL,
 						WCD9XXX_CLSAB_REQ_DISABLE);
 		}
@@ -3441,7 +3442,7 @@ static int taiko_hphr_dac_event(struct snd_soc_dapm_widget *w,
 						 WCD9XXX_CLSH_EVENT_PRE_DAC);
 		} else {
 			wcd9xxx_enable_high_perf_mode(codec, &taiko_p->clsh_d,
-						WCD9XXX_NON_UHQA_MODE,
+						taiko_p->uhqa_mode,
 						WCD9XXX_CLSAB_STATE_HPHR,
 						WCD9XXX_CLSAB_REQ_ENABLE);
 		}
@@ -3457,7 +3458,7 @@ static int taiko_hphr_dac_event(struct snd_soc_dapm_widget *w,
 						 WCD9XXX_CLSH_EVENT_POST_PA);
 		} else {
 			wcd9xxx_enable_high_perf_mode(codec, &taiko_p->clsh_d,
-						WCD9XXX_NON_UHQA_MODE,
+						taiko_p->uhqa_mode,
 						WCD9XXX_CLSAB_STATE_HPHR,
 						WCD9XXX_CLSAB_REQ_DISABLE);
 		}
