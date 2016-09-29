@@ -39,6 +39,9 @@
 #include <linux/fs.h>
 #include <linux/debugfs.h>
 #include <linux/dropbox.h>
+#ifdef CONFIG_STATE_HELPER
+#include <linux/state_helper.h>
+#endif
 
 #define FUEL_GAUGE_REPORT "Fuel-Gauge_Report"
 #define MAX_FULL_CAP "MAX1704X - Full Cap = %d\n"
@@ -507,6 +510,9 @@ static int max17042_get_property(struct power_supply *psy,
 				val->intval = 1;
 		} else
 			val->intval = ret;
+#ifdef CONFIG_STATE_HELPER
+		batt_level_notify(val->intval);
+#endif
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 		/* High Threshold for FCC reporting is 104% of design cap */
