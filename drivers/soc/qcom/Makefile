@@ -23,5 +23,5 @@ obj-$(CONFIG_MEM_SHARE_QMI_SERVICE)		+= memshare/
 obj-y		+= socinfo.o
 
 obj-$(CONFIG_STATE_NOTIFIER)		+= state_notifier.o
-
 obj-$(CONFIG_FORCE_FAST_CHARGE)	+= fastchg.o
+obj-$(CONFIG_AUTOSMP)			+= autosmp.o
