@@ -1108,12 +1108,15 @@ static void __ref do_core_control(long temp)
 {
 	int i = 0;
 	int ret = 0;
+    uint32_t previous_cpus_offlined = 0;
 
 	if (!core_control_enabled) {
 		check_core_control();
 		return;
 	}
 
+	previous_cpus_offlined = msm_thermal_info.cpus_offlined;
+	
 	mutex_lock(&core_control_mutex);
 	if (msm_thermal_info.core_control_mask &&
 		temp >= msm_thermal_info.core_limit_temp_degC) {
@@ -1172,6 +1175,10 @@ static void __ref do_core_control(long temp)
 		}
 	}
 	mutex_unlock(&core_control_mutex);
+#ifdef CONFIG_STATE_HELPER
+	if (previous_cpus_offlined != msm_thermal_info.cpus_offlined)
+		reschedule_helper();
+#endif
 }
 
 static int msm_thermal_suspend_callback(
